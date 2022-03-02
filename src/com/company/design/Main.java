@@ -1,6 +1,7 @@
 package com.company.design;
 
 import com.company.design.aop.AopBrowser;
+import com.company.design.decorator.*;
 import com.company.design.proxy.Browser;
 import com.company.design.proxy.BrowserProxy;
 import com.company.design.proxy.IBrowser;
@@ -11,37 +12,19 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
-        /*Browser browser = new Browser("www.naver.com");
-        browser.show();
-        browser.show();
-        browser.show();*/
+        ICar audi = new Audi(1000);
+        audi.showPrice();
 
-        /*IBrowser browser = new BrowserProxy("www.naver.com");
-        browser.show();
-        browser.show();
-        browser.show();
-        browser.show();
-        browser.show();*/
+        // model a3
+        ICar audi3 = new A3(audi,"A3");
+        audi3.showPrice();
 
-        AtomicLong start = new AtomicLong();
-        AtomicLong end = new AtomicLong();
+        // model a4
+        ICar audi4 = new A4(audi,"A4");
+        audi4.showPrice();
 
-        IBrowser aopBrowser = new AopBrowser("www.naver.com",
-                ()->{
-                    System.out.println("before");
-                    start.set(System.currentTimeMillis());
-                },
-                ()->{
-                    long now = System.currentTimeMillis();
-                    end.set(now - start.get());
-                });
-
-        aopBrowser.show();
-        System.out.println( "loading time: "+ end.get());
-
-        System.out.println();
-
-        aopBrowser.show();
-        System.out.println( "loading time: "+ end.get());
+        // model a5
+        ICar audi5 = new A5(audi,"A5");
+        audi5.showPrice();
     }
 }
