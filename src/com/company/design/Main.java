@@ -1,32 +1,38 @@
 package com.company.design;
 
-import com.company.design.aop.AopBrowser;
-import com.company.design.decorator.*;
-import com.company.design.observer.Button;
-import com.company.design.observer.IButtonlistener;
-import com.company.design.proxy.Browser;
-import com.company.design.proxy.BrowserProxy;
-import com.company.design.proxy.IBrowser;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
+import com.company.design.facade.Ftp;
+import com.company.design.facade.Reader;
+import com.company.design.facade.SftpClient;
+import com.company.design.facade.Writer;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
-       Button button = new Button("버튼");
+        //FTP
+        Ftp ftpClient = new Ftp("www.foo.co.kr",22,"/home/etc");
+        ftpClient.connect();
+        ftpClient.moveDirectory();
 
-       button.addListener(new IButtonlistener() {
-           @Override
-           public void clickEvent(String event) {
-               System.out.println(event);
-           }
-       });
+        //WRITER
+        Writer writer = new Writer("text.tmp");
+        writer.fileConnect();
+        writer.write();
 
-        button.click("메세지 전달 : click1");
-        button.click("메세지 전달 : click2");
-        button.click("메세지 전달 : click3");
-        button.click("메세지 전달 : click4");
+        //READER
+        Reader reader = new Reader("user.env");
+        reader.fileConnect();
+        reader.fileRead();
 
+        //DISCONNECT
+        reader.fileDisonnect();
+        writer.fileDisonnect();
+        ftpClient.disConnect();
+
+        SftpClient sftpClient = new SftpClient("www.foo.co.kr",22,"/home/etc","text.tmp");
+        sftpClient.connect();
+        sftpClient.writer();
+        sftpClient.read();
+        sftpClient.disConnect();
     }
 }
